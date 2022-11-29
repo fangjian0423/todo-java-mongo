@@ -12,13 +12,13 @@ import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 @Configuration
 public class MongoDBConfiguration {
 
-    @Bean
-    public MongoCustomConversions mongoCustomConversions() {
-        return new MongoCustomConversions(Arrays.asList(
-                new OffsetDateTimeReadConverter(),
-                new OffsetDateTimeWriteConverter()
-        ));
-    }
+//    @Bean
+//    public MongoCustomConversions mongoCustomConversions() {
+//        return new MongoCustomConversions(Arrays.asList(
+//                new OffsetDateTimeReadConverter(),
+//                new OffsetDateTimeWriteConverter()
+//        ));
+//    }
 
     static class OffsetDateTimeWriteConverter implements Converter<OffsetDateTime, Date> {
 

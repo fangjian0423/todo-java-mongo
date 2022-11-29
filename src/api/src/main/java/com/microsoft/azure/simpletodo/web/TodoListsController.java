@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 public class TodoListsController implements ListsApi {
@@ -33,7 +34,7 @@ public class TodoListsController implements ListsApi {
     public ResponseEntity<TodoItem> createItem(String listId, TodoItem todoItem) {
         Optional<TodoList> optionalTodoList = todoListRepository.findById(listId);
         if (optionalTodoList.isPresent()) {
-            todoItem.setListId(listId);
+            todoItem.setListId(UUID.fromString(listId));
             TodoItem savedTodoItem = todoItemRepository.save(todoItem);
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -94,7 +95,7 @@ public class TodoListsController implements ListsApi {
         }
         Optional<TodoList> todoList = todoListRepository.findById(listId);
         if (todoList.isPresent()) {
-            return ResponseEntity.ok(todoItemRepository.findTodoItemsByTodoList(listId, skip.intValue(), top.intValue()));
+            return ResponseEntity.ok(todoItemRepository.findByListId(listId, PageRequest.of(skip.intValue(), top.intValue())));
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -110,7 +111,7 @@ public class TodoListsController implements ListsApi {
         }
         return ResponseEntity.ok(
                 todoItemRepository
-                        .findTodoItemsByTodoListAndState(listId, state.name(), skip.intValue(), top.intValue()));
+                        .findByListIdAndState(listId, state.name(), PageRequest.of(skip.intValue(), top.intValue())));
     }
 
     @Override
@@ -126,7 +127,7 @@ public class TodoListsController implements ListsApi {
         if (skip == null) {
             skip = new BigDecimal(0);
         }
-        return ResponseEntity.ok(todoListRepository.findAll(skip.intValue(), top.intValue()));
+        return ResponseEntity.ok(todoListRepository.findAll(PageRequest.of(skip.intValue(), top.intValue())).getContent());
     }
 
     @Override
@@ -139,7 +140,7 @@ public class TodoListsController implements ListsApi {
 
     @Override
     public ResponseEntity<Void> updateItemsStateByListId(String listId, TodoState state, List<String> requestBody) {
-        for (TodoItem todoItem : todoItemRepository.findTodoItemsByTodoList(listId)) {
+        for (TodoItem todoItem : todoItemRepository.findByListId(listId)) {
             todoItem.state(state);
             todoItemRepository.save(todoItem);
         }
@@ -150,7 +151,7 @@ public class TodoListsController implements ListsApi {
     public ResponseEntity<TodoList> updateListById(String listId, TodoList todoList) {
         return todoListRepository
                 .findById(listId)
-                .map(t -> ResponseEntity.ok(todoListRepository.save(t)))
+                .map(t -> ResponseEntity.ok(todoListRepository.save(todoList)))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
@@ -162,7 +163,7 @@ public class TodoListsController implements ListsApi {
         Optional<TodoItem> optionalTodoItem = todoItemRepository.findById(itemId);
         if (optionalTodoItem.isPresent()) {
             TodoItem todoItem = optionalTodoItem.get();
-            if (todoItem.getListId().equals(listId)) {
+            if (todoItem.getListId().toString().equals(listId)) {
                 return Optional.of(todoItem);
             } else {
                 return Optional.empty();

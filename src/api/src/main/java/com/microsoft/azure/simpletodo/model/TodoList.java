@@ -1,14 +1,10 @@
 package com.microsoft.azure.simpletodo.model;
 
-import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import org.openapitools.jackson.nullable.JsonNullable;
-import java.time.OffsetDateTime;
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.data.annotation.Id;
 
 
 import java.util.*;
@@ -23,7 +19,8 @@ import javax.annotation.Generated;
 public class TodoList {
 
   @JsonProperty("id")
-  private String id;
+  @Id
+  private UUID id;
 
   @JsonProperty("name")
   private String name;
@@ -31,7 +28,7 @@ public class TodoList {
   @JsonProperty("description")
   private String description;
 
-  public TodoList id(String id) {
+  public TodoList id(UUID id) {
     this.id = id;
     return this;
   }
@@ -39,14 +36,14 @@ public class TodoList {
   /**
    * Get id
    * @return id
-  */
-  
+   */
+
   @Schema(name = "id", required = false)
-  public String getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
@@ -58,8 +55,8 @@ public class TodoList {
   /**
    * Get name
    * @return name
-  */
-  @NotNull 
+   */
+  @NotNull
   @Schema(name = "name", required = true)
   public String getName() {
     return name;
@@ -77,8 +74,8 @@ public class TodoList {
   /**
    * Get description
    * @return description
-  */
-  
+   */
+
   @Schema(name = "description", required = false)
   public String getDescription() {
     return description;
@@ -98,8 +95,8 @@ public class TodoList {
     }
     TodoList todoList = (TodoList) o;
     return Objects.equals(this.id, todoList.id) &&
-        Objects.equals(this.name, todoList.name) &&
-        Objects.equals(this.description, todoList.description);
+            Objects.equals(this.name, todoList.name) &&
+            Objects.equals(this.description, todoList.description);
   }
 
   @Override

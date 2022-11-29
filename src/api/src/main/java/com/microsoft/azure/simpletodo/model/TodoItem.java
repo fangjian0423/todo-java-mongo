@@ -1,14 +1,11 @@
 package com.microsoft.azure.simpletodo.model;
 
-import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.microsoft.azure.simpletodo.model.TodoState;
 import java.time.OffsetDateTime;
+
+import org.springframework.data.annotation.Id;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.openapitools.jackson.nullable.JsonNullable;
-import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,10 +23,11 @@ import javax.annotation.Generated;
 public class TodoItem {
 
   @JsonProperty("id")
-  private String id;
+  @Id
+  private UUID id;
 
   @JsonProperty("listId")
-  private String listId;
+  private UUID listId;
 
   @JsonProperty("name")
   private String name;
@@ -48,7 +46,11 @@ public class TodoItem {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime completedDate;
 
-  public TodoItem id(String id) {
+  public TodoItem() {
+    this.dueDate = OffsetDateTime.now();
+  }
+
+  public TodoItem id(UUID id) {
     this.id = id;
     return this;
   }
@@ -56,18 +58,18 @@ public class TodoItem {
   /**
    * Get id
    * @return id
-  */
-  
+   */
+
   @Schema(name = "id", required = false)
-  public String getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
-  public TodoItem listId(String listId) {
+  public TodoItem listId(UUID listId) {
     this.listId = listId;
     return this;
   }
@@ -75,14 +77,14 @@ public class TodoItem {
   /**
    * Get listId
    * @return listId
-  */
-  @NotNull 
+   */
+  @NotNull
   @Schema(name = "listId", required = true)
-  public String getListId() {
+  public UUID getListId() {
     return listId;
   }
 
-  public void setListId(String listId) {
+  public void setListId(UUID listId) {
     this.listId = listId;
   }
 
@@ -94,8 +96,8 @@ public class TodoItem {
   /**
    * Get name
    * @return name
-  */
-  @NotNull 
+   */
+  @NotNull
   @Schema(name = "name", required = true)
   public String getName() {
     return name;
@@ -113,8 +115,8 @@ public class TodoItem {
   /**
    * Get description
    * @return description
-  */
-  @NotNull 
+   */
+  @NotNull
   @Schema(name = "description", required = true)
   public String getDescription() {
     return description;
@@ -132,8 +134,8 @@ public class TodoItem {
   /**
    * Get state
    * @return state
-  */
-  @Valid 
+   */
+  @Valid
   @Schema(name = "state", required = false)
   public TodoState getState() {
     return state;
@@ -151,8 +153,8 @@ public class TodoItem {
   /**
    * Get dueDate
    * @return dueDate
-  */
-  @Valid 
+   */
+  @Valid
   @Schema(name = "dueDate", required = false)
   public OffsetDateTime getDueDate() {
     return dueDate;
@@ -170,8 +172,8 @@ public class TodoItem {
   /**
    * Get completedDate
    * @return completedDate
-  */
-  @Valid 
+   */
+  @Valid
   @Schema(name = "completedDate", required = false)
   public OffsetDateTime getCompletedDate() {
     return completedDate;
@@ -191,12 +193,12 @@ public class TodoItem {
     }
     TodoItem todoItem = (TodoItem) o;
     return Objects.equals(this.id, todoItem.id) &&
-        Objects.equals(this.listId, todoItem.listId) &&
-        Objects.equals(this.name, todoItem.name) &&
-        Objects.equals(this.description, todoItem.description) &&
-        Objects.equals(this.state, todoItem.state) &&
-        Objects.equals(this.dueDate, todoItem.dueDate) &&
-        Objects.equals(this.completedDate, todoItem.completedDate);
+            Objects.equals(this.listId, todoItem.listId) &&
+            Objects.equals(this.name, todoItem.name) &&
+            Objects.equals(this.description, todoItem.description) &&
+            Objects.equals(this.state, todoItem.state) &&
+            Objects.equals(this.dueDate, todoItem.dueDate) &&
+            Objects.equals(this.completedDate, todoItem.completedDate);
   }
 
   @Override

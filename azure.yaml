@@ -13,3 +13,5 @@ services:
     project: ./src/api
     language: java
     host: appservice
+infra:
+  provider: terraform
